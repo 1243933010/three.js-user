@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <canvas id="c"></canvas>
+
+
+    <script type="module">
+        // import * as THREE from '../three.min.js';
+        import * as THREE from '../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+
+        console.log(THREE)
+
+        const main = () => {
+            const fov = 75;  //视野范围
+            const aspect = 2;  //画布的宽高比
+            const near = 0.1;  //近裁剪面,近平面，它们限制了摄像机面朝方向的可绘区域。 任何距离小于或超过这个范围的物体都将被裁剪掉(不绘制)。
+            const far = 5;   //远裁剪面,远平面
+
+            const canvas = document.querySelector('#c');
+            const renderer = new THREE.WebGLRenderer({   //渲染器
+                canvas, antialias: true
+            });
+
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+            camera.position.z = 2;
+
+            const scene = new THREE.Scene();
+
+
+            // const radius = 6;
+            // const height = 8;
+            // const radialSegments = 16;
+            // const heightSegments = 2;
+            // const openEnded = true;
+            // const thetaStart = Math.PI * 0.25;
+            // const thetaLength = Math.PI * 1.5;
+            // const geometry = new THREE.ConeGeometry(
+            //     radius, height,
+            //     radialSegments, heightSegments,
+            //     openEnded,
+            //     thetaStart, thetaLength);
+
+            const boxWidth = 1;
+            const boxHeight = 1;
+            const boxDepth = 1;
+            const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+            const material = new THREE.MeshBasicMaterial({ //材质
+                color: 0x44aa88,
+                // wireframe: true
+            });
+
+            const cone = new THREE.Mesh(geometry, material); //网格
+
+            scene.add(cone); //添加网格
+
+            renderer.render(scene, camera);
+        }
+
+        main();
+
+    </script>
+</body>
+
+</html>
