@@ -22,23 +22,37 @@
             });
 
             const cubes = [];
+            const geometry = new THREE.BoxGeometry(1, 1, 1);  //立方体
+            // const geometry = new THREE.ConeGeometry(1, 1, 4)  //圆锥体
+            // const geometry = new THREE.CylinderGeometry(1, 1, 1, 30)  // 圆柱体
             const loader = new THREE.TextureLoader();
-            const texture = loader.load('./image/wall.jpg');
-            texture.colorSpace = THREE.SRGBColorSpace;
 
-            const material = new THREE.MeshBasicMaterial({
-                color: 0xFF8844,
-                map: texture
-            });
+            // const texture = loader.load('./image/wall.jpg');   //单个纹理贴图
+            // texture.colorSpace = THREE.SRGBColorSpace;
 
-            const geometry = new THREE.BoxGeometry(1, 1, 1);
-            const mesh = new THREE.Mesh(geometry, material);
+            // const material = new THREE.MeshBasicMaterial({
+            //     color: 0xFF8844,
+            //     map: texture
+            // });
+            // const mesh = new THREE.Mesh(geometry, material);
+
+
+            const materials = [  //多个纹理贴图
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-1.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-2.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-3.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-4.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-5.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-6.jpg') }),
+            ]
+            const mesh = new THREE.Mesh(geometry, materials);
+
+
             scene.add(mesh);
             cubes.push(mesh);
 
-            console.log(cubes);
-            // const camera = new THREE.PerspectiveCamera(75, 2, 0.1, 100);
-            // camera.position.z = 3;
+            // console.log(cubes);
+
             const fov = 75;
             const aspect = 2; // the canvas default
             const near = 0.1;
@@ -53,6 +67,15 @@
             //     requestAnimationFrame(render);
             // }
             // render();
+
+
+            function loadColorTexture(path) {
+
+                const texture = loader.load(path);
+                texture.colorSpace = THREE.SRGBColorSpace;
+                return texture;
+
+            }
 
             function resizeRendererToDisplaySize(renderer) {
 
@@ -108,7 +131,7 @@
 
 
 <style>
-    #c{
+    #c {
         width: 800px;
         height: 800px;
     }
