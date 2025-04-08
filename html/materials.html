@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <canvas id="c"></canvas>
+
+
+    <script type="module">
+        import * as THREE from '../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+        const main = () => {
+            const canvas = document.querySelector('#c');
+            const scene = new THREE.Scene();
+            const renderer = new THREE.WebGLRenderer({   //渲染器
+                canvas, antialias: true
+            });
+
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x44aa88,
+                // flatShading: true,
+                // emissive:0x44aa88,
+                // shininess:0
+
+            })
+
+            // const material = new THREE.MeshBasicMaterial({ //材质
+            //     color: 0x44aa88,
+            //     // wireframe: true
+            // });
+
+            const color = 'yellow';  //黄色光源
+            const intensity = 2;
+            const light = new THREE.AmbientLight(color, intensity);  //环境光,MeshPhongMaterial没光源看不到
+            scene.add(light);
+            // const material = new THREE.MeshPhongMaterial();  //材质
+            // material.color.setHSL(0, 1, .5);  // 红色
+            // // material.flatShading = true;
+
+
+            const radius = 1;
+            const segments = 100;
+            const geometry = new THREE.CircleGeometry(radius, segments);
+
+            // const boxWidth = 1;
+            // const boxHeight = 1;
+            // const boxDepth = 1;
+            // const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+            // const material = new THREE.MeshBasicMaterial({ //材质
+            //     color: 0x44aa88,
+            //     // wireframe: true
+            // });
+            
+            const cone = new THREE.Mesh(geometry, material); //网格
+            scene.add(cone);
+
+            const fov = 75;
+            const aspect = 2;
+            const near = 0.1;
+            const far = 10;
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+            camera.position.z = 2;
+            renderer.render(scene, camera);
+        }
+
+        main();
+    </script>
+</body>
+
+</html>
