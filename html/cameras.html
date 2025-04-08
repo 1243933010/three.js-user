@@ -37,17 +37,21 @@
             const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
             camera.position.set(0, 10, 20);
 
-            const gui = new GUI();  // 摄像机控制器
-            gui.add(camera, 'fov', 1, 180).onChange(updateCamera);
-            const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
-            gui.add(minMaxGUIHelper, 'min', 0.1, 50, 0.1).name('near').onChange(updateCamera);
-            gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far').onChange(updateCamera);
-            function updateCamera() {
-                camera.updateProjectionMatrix();
-            }
+            // const gui = new GUI();  // 摄像机控制器
+            // gui.add(camera, 'fov', 1, 180).onChange(updateCamera);
+            // const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
+            // gui.add(minMaxGUIHelper, 'min', 0.1, 50, 0.1).name('near').onChange(updateCamera);
+            // gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far').onChange(updateCamera);
+            // function updateCamera() {
+            //     camera.updateProjectionMatrix();
+            // }
 
             const controls = new OrbitControls(camera, canvas);  // 控制器,手势绑定到canvas上
             controls.target.set(0, 5, 0);
+            controls.enableDamping = true;  // 添加阻尼效果
+            controls.dampingFactor = 0.05;  // 阻尼系数
+            controls.enableZoom = true;     // 启用缩放
+            controls.enablePan = true;      // 启用平移
             controls.update();
 
 
@@ -138,6 +142,7 @@
                     camera.aspect = canvas.clientWidth / canvas.clientHeight;
                     camera.updateProjectionMatrix();
                 }
+                controls.update();  // 更新控制器
                 renderer.render(scene, camera);
                 requestAnimationFrame(render);
             }
@@ -204,7 +209,7 @@
         height: 300px;
     }
 
-    .split {
+    /* .split {
         position: absolute;
         left: 0;
         top: 0;
@@ -216,5 +221,5 @@
     .split>div {
         width: 100%;
         height: 100%;
-    }
+    } */
 </style>
