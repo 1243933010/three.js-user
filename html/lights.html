@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光照</title>
+</head>
+
+<body>
+
+    <canvas id="c"></canvas>
+
+
+    <script type="module">
+        import { OrbitControls } from '../OrbitControls.js';
+        import { GUI } from '../lil-gui.module.min.js';
+        import * as THREE from '../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+        console.log(THREE);
+        const main = () => {
+            const canvas = document.querySelector('#c');
+            const scene = new THREE.Scene();
+            const renderer = new THREE.WebGLRenderer({   //渲染器
+                canvas, antialias: true
+            });
+
+
+            const fov = 45;
+            const aspect = 2;  // canvas 的默认宽高 300:150
+            const near = 0.1;
+            const far = 100;
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+            camera.position.set(0, 10, 20);
+
+            const controls = new OrbitControls(camera, canvas);
+            controls.target.set(0, 5, 0);
+            controls.update();
+
+
+            {  // 地板
+                const planeSize = 40;
+                const loader = new THREE.TextureLoader();
+                const texture = loader.load('./image/checker.png');
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.magFilter = THREE.NearestFilter;
+                texture.colorSpace = THREE.SRGBColorSpace;
+                const repeats = planeSize / 2;
+                texture.repeat.set(repeats, repeats);
+
+
+
+                const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
+                const planeMat = new THREE.MeshPhongMaterial({
+                    map: texture,
+                    side: THREE.DoubleSide,
+                });
+                const mesh = new THREE.Mesh(planeGeo, planeMat);
+                mesh.rotation.x = Math.PI * -.5;
+                scene.add(mesh);
+            }
+
+
+            { // 立方体
+                const cubeSize = 4;
+                const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+                const cubeMat = new THREE.MeshPhongMaterial({ color: '#8AC' });
+                const mesh = new THREE.Mesh(cubeGeo, cubeMat);
+                mesh.position.set(cubeSize + 1, cubeSize / 2, 0);
+                scene.add(mesh);
+
+            }
+
+            {// 球体
+                const sphereRadius = 3;
+                const sphereWidthDivisions = 32;
+                const sphereHeightDivisions = 16;
+                const sphereGeo = new THREE.SphereGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions);
+                const sphereMat = new THREE.MeshPhongMaterial({ color: '#CA8' });
+                const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+                mesh.position.set(- sphereRadius - 1, sphereRadius + 2, 0);
+                scene.add(mesh);
+
+            }
+
+
+            {// 环境光
+                const color = 0xFFFFFF;
+                const intensity = 1;
+                const light = new THREE.AmbientLight(color, intensity);
+                scene.add(light);
+
+                const gui = new GUI();
+                gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
+                gui.add(light, 'intensity', 0, 5, 0.01);
+            }
+
+
+            function resizeRendererToDisplaySize(renderer) {// 窗口大小改变时，重新设置渲染器尺寸
+                const canvas = renderer.domElement;
+                const width = canvas.clientWidth;
+                const height = canvas.clientHeight;
+                const needResize = canvas.width !== width || canvas.height !== height;
+                if (needResize) {
+                    renderer.setSize(width, height, false);
+                }
+                return needResize;
+            }
+
+            function render() {// 渲染函数
+                if (resizeRendererToDisplaySize(renderer)) {
+                    const canvas = renderer.domElement;
+                    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                    camera.updateProjectionMatrix();
+                }
+                renderer.render(scene, camera);
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+
+        }
+
+
+        class ColorGUIHelper {  // 颜色辅助类
+            constructor(object, prop) {
+                this.object = object;
+                this.prop = prop;
+            }
+            get value() {
+                return `#${this.object[this.prop].getHexString()}`;
+            }
+            set value(hexString) {
+                this.object[this.prop].set(hexString);
+            }
+
+        }
+
+        main();
+    </script>
+</body>
+
+</html>
+
+
+<style>
+    #c {
+        width: 500px;
+        height: 300px;
+    }
+</style>
