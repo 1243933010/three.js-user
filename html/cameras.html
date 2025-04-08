@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>默认空白页面</title>
+</head>
+
+<body>
+
+    <canvas id="c"></canvas>
+
+
+    <script type="module">
+        import * as THREE from '../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+        const main = () => {
+            const canvas = document.querySelector('#c');
+            const scene = new THREE.Scene();
+            const renderer = new THREE.WebGLRenderer({   //渲染器
+                canvas, antialias: true
+            });
+        }
+
+        main();
+    </script>
+</body>
+
+</html>
+
+<style>
+    #c {
+        width: 300px;
+        height: 150px;
+    }
+</style>
