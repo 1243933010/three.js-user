@@ -4,12 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>相机</title>
+    <title>摄像机</title>
 </head>
 
 <body>
 
     <canvas id="c"></canvas>
+
+    <div class="split">
+        <div id="view1" tabindex="1"></div>
+        <div id="view2" tabindex="2"></div>
+    </div>
 
 
     <script type="module">
@@ -31,6 +36,15 @@
             const far = 100;
             const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
             camera.position.set(0, 10, 20);
+
+            const gui = new GUI();  // 摄像机控制器
+            gui.add(camera, 'fov', 1, 180).onChange(updateCamera);
+            const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
+            gui.add(minMaxGUIHelper, 'min', 0.1, 50, 0.1).name('near').onChange(updateCamera);
+            gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far').onChange(updateCamera);
+            function updateCamera() {
+                camera.updateProjectionMatrix();
+            }
 
             const controls = new OrbitControls(camera, canvas);  // 控制器,手势绑定到canvas上
             controls.target.set(0, 5, 0);
@@ -166,7 +180,7 @@
                 this.min = this.min;  // 这将调用min的setter
             }
         }
-        
+
 
         function makeXYZGUI(gui, vector3, name, onChangeFn) {
             const folder = gui.addFolder(name);
@@ -175,6 +189,7 @@
             folder.add(vector3, 'z', -10, 10).onChange(onChangeFn);
             folder.open();
         }
+
 
         main();
     </script>
@@ -187,5 +202,19 @@
     #c {
         width: 500px;
         height: 300px;
+    }
+
+    .split {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+    }
+
+    .split>div {
+        width: 100%;
+        height: 100%;
     }
 </style>
