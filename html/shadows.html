@@ -87,6 +87,8 @@
                     const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
                     shadowMesh.rotation.x = Math.PI * -.5;
                     shadowMesh.position.y = 0.001;
+                    // shadowMesh.position.set(0, 0.001, 0);
+
                     const shadowSize = sphereRadius * 4;
                     shadowMesh.scale.set(shadowSize, shadowSize, shadowSize);
                     base.add(shadowMesh);
@@ -118,7 +120,7 @@
                 scene.add(light);
             }
 
-            {
+            { // 灯光
                 const color = 0xffffff;
                 const intensity = 1;
                 const light = new THREE.DirectionalLight(color, intensity);
@@ -140,15 +142,7 @@
                 return needResize;
             }
 
-            // function render() {// 渲染函数
-            //     if (resizeRendererToDisplaySize(renderer)) {
-            //         const canvas = renderer.domElement;
-            //         camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            //         camera.updateProjectionMatrix();
-            //     }
-            //     renderer.render(scene, camera);
-            //     requestAnimationFrame(render);
-            // }
+
             function render(time) {
                 time *= 0.001;  // convert to seconds
 
