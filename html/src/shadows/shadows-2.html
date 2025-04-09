@@ -16,26 +16,24 @@
         import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
        import { OrbitControls } from '../../../OrbitControls.js';
         import { resizeRendererToDisplaySize, main } from '../../utils/utils.js'
-        import { plainGenerate, lightGenerate,sphereGenerate,boxGenerate,renderFnc } from './js/index.js'
+        import {initCamera,renderFnc, plainGenerate, lightGenerate,sphereGenerate,boxGenerate } from './js/index.js'
 
 
         main(({ canvas, scene, renderer, camera, loader }) => {
             // scene.background = new THREE.Color('white');  //背景色
             renderer.shadowMap.enabled = true;  //渲染器阴影渲染开关
-            
             camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100)
-            camera.position.set(0, 10, 20);
-            camera.lookAt(0, 0, 0);
-
+            
+            initCamera({ camera }) // 相机
             plainGenerate({ scene, loader, renderer, camera }) // 地板
             lightGenerate({ scene, loader, renderer, camera }) // 灯光
             sphereGenerate({ scene, loader, renderer, camera }) 
             boxGenerate({ scene, loader, renderer, camera })
             
-            const controls = new OrbitControls(camera, canvas);
+            const controls = new OrbitControls(camera, canvas);  // 轨道控制器
             controls.update();
 
-            const render = (time) => {
+            const render = (time) => {  // 渲染函数
                 renderFnc({ scene, renderer, camera, time })
                 requestAnimationFrame(render);
             }
