@@ -19,11 +19,13 @@ export const main = (callback,call, id = 'c') => {
     const canvas = document.querySelector(`#${id}`);
     const scene = new THREE.Scene();
     const camera = null;
+    const loader = new THREE.TextureLoader();
     const renderer = new THREE.WebGLRenderer({   //渲染器
         canvas, antialias: true
     });
     const render = (time) => {
+        // console.log('render',time)
         call(render)
     }
-    callback({ canvas, scene, renderer, camera,render })
+    callback({ canvas, scene, renderer,loader, camera,render })
 }

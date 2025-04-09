@@ -18,10 +18,9 @@
 
 
 
-        main(({ canvas, scene, renderer, camera,loader, render }) => {
+        main(({ canvas, scene, renderer, camera, render }) => {
             camera = new THREE.PerspectiveCamera(75, 2, 0.1, 100)
-            loader.load('./image/checker.png')
-
+            
             renderer.render(scene, camera);
             render()
             
