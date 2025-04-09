@@ -1,5 +1,6 @@
 
 import * as THREE from '../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+// import { OrbitControls } from '../../OrbitControls.js';
 export const resizeRendererToDisplaySize = (renderer) => {  // resize the renderer to the display size
     const canvas = renderer.domElement;
     const width = canvas.clientWidth;
