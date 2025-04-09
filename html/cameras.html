@@ -24,6 +24,8 @@
         // console.log(THREE);
         const main = () => {
             const canvas = document.querySelector('#c');
+            const view1Elem = document.querySelector('#view1');
+            const view2Elem = document.querySelector('#view2');
             const scene = new THREE.Scene();
             const renderer = new THREE.WebGLRenderer({   //渲染器
                 canvas, antialias: true
@@ -36,17 +38,32 @@
             const far = 100;
             const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
             camera.position.set(0, 10, 20);
+            const cameraHelper = new THREE.CameraHelper(camera);
+            scene.add(cameraHelper);
 
-            // const gui = new GUI();  // 摄像机控制器
+
+            const camera2 = new THREE.PerspectiveCamera(60, 2, 0.1, 500);
+            camera2.position.set(40, 10, 30);
+            camera2.lookAt(0, 5, 0);
+            const controls2 = new OrbitControls(camera2, view2Elem);
+            controls2.target.set(0, 5, 0);
+            controls2.update();
+
+            const gui = new GUI();  // 摄像机控制器
             // gui.add(camera, 'fov', 1, 180).onChange(updateCamera);
-            // const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
+            gui.add(camera, 'fov', 1, 180);
+            const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
             // gui.add(minMaxGUIHelper, 'min', 0.1, 50, 0.1).name('near').onChange(updateCamera);
             // gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far').onChange(updateCamera);
+            gui.add(minMaxGUIHelper, 'min', 0.1, 50, 0.1).name('near');
+            gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far');
             // function updateCamera() {
             //     camera.updateProjectionMatrix();
             // }
 
-            const controls = new OrbitControls(camera, canvas);  // 控制器,手势绑定到canvas上
+            // const controls = new OrbitControls(camera, canvas);  // 控制器,手势绑定到canvas上
+            const controls = new OrbitControls(camera, view1Elem);  // 控制器,手势绑定到canvas上
+
             controls.target.set(0, 5, 0);
             controls.enableDamping = true;  // 添加阻尼效果
             controls.dampingFactor = 0.05;  // 阻尼系数
@@ -123,7 +140,27 @@
             }
 
 
+            function setScissorForElement(elem) {
+                const canvasRect = canvas.getBoundingClientRect();
+                const elemRect = elem.getBoundingClientRect();
 
+                // 计算canvas的尺寸
+                const right = Math.min(elemRect.right, canvasRect.right) - canvasRect.left;
+                const left = Math.max(0, elemRect.left - canvasRect.left);
+                const bottom = Math.min(elemRect.bottom, canvasRect.bottom) - canvasRect.top;
+                const top = Math.max(0, elemRect.top - canvasRect.top);
+
+                const width = Math.min(canvasRect.width, right - left);
+                const height = Math.min(canvasRect.height, bottom - top);
+
+                // 设置剪函数以仅渲染一部分场景
+                const positiveYUpBottom = canvasRect.height - bottom;
+                renderer.setScissor(left, positiveYUpBottom, width, height);
+                renderer.setViewport(left, positiveYUpBottom, width, height);
+
+                // 返回aspect
+                return width / height;
+            }
 
             function resizeRendererToDisplaySize(renderer) {// 窗口大小改变时，重新设置渲染器尺寸
                 const canvas = renderer.domElement;
@@ -137,13 +174,50 @@
             }
 
             function render() {// 渲染函数
-                if (resizeRendererToDisplaySize(renderer)) {
-                    const canvas = renderer.domElement;
-                    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                // if (resizeRendererToDisplaySize(renderer)) {
+                //     const canvas = renderer.domElement;
+                //     camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                //     camera.updateProjectionMatrix();
+                // }
+                resizeRendererToDisplaySize(renderer);
+
+                // 启用剪刀函数
+                renderer.setScissorTest(true);
+
+                // 渲染主视野
+                {
+                    const aspect = setScissorForElement(view1Elem);
+
+                    // 用计算出的aspect修改摄像机参数
+                    camera.aspect = aspect;
                     camera.updateProjectionMatrix();
+                    cameraHelper.update();
+
+                    // 来原视野中不要绘制cameraHelper
+                    cameraHelper.visible = false;
+
+                    // scene.background.set(0x000000);
+
+                    // 渲染
+                    renderer.render(scene, camera);
                 }
-                controls.update();  // 更新控制器
-                renderer.render(scene, camera);
+
+                // 渲染第二台摄像机
+                {
+                    const aspect = setScissorForElement(view2Elem);
+
+                    // 调整aspect
+                    camera2.aspect = aspect;
+                    camera2.updateProjectionMatrix();
+
+                    // 在第二台摄像机中绘制cameraHelper
+                    cameraHelper.visible = true;
+
+                    // scene.background.set(0x000040);
+
+                    renderer.render(scene, camera2);
+                }
+                // renderer.render(scene, camera);
                 requestAnimationFrame(render);
             }
             requestAnimationFrame(render);
@@ -196,6 +270,7 @@
         }
 
 
+
         main();
     </script>
 </body>
@@ -209,7 +284,7 @@
         height: 300px;
     }
 
-    /* .split {
+    .split {
         position: absolute;
         left: 0;
         top: 0;
@@ -221,5 +296,5 @@
     .split>div {
         width: 100%;
         height: 100%;
-    } */
+    }
 </style>
