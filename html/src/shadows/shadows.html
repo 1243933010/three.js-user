@@ -13,8 +13,8 @@
 
 
     <script type="module">
-        import * as THREE from '../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
-        import { GUI } from '../lil-gui.module.min.js';
+        import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+        import { GUI } from '../../../lil-gui.module.min.js';
 
         const main = () => {
             const canvas = document.querySelector('#c');
@@ -47,7 +47,7 @@
            
             { // 地板
                 const planeSize = 40;
-                const texture = loader.load('./image/checker.png');
+                const texture = loader.load('../../image/checker.png');
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.magFilter = THREE.NearestFilter;

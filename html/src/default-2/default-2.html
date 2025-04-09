@@ -13,15 +13,14 @@
 
 
     <script type="module">
-        import * as THREE from '../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
-        import { resizeRendererToDisplaySize, main } from './utils/utils.js'
+        import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+        import { resizeRendererToDisplaySize, main } from '../../utils/utils.js'
 
 
 
-        main(({ canvas, scene, renderer, camera,loader, render }) => {
+        main(({ canvas, scene, renderer, camera, render }) => {
             camera = new THREE.PerspectiveCamera(75, 2, 0.1, 100)
-            loader.load('./image/checker.png')
-
+            
             renderer.render(scene, camera);
             render()
             

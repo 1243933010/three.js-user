@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阴影-2</title>
+</head>
+
+<body>
+
+    <canvas id="app"></canvas>
+
+
+    <script type="module">
+        import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+        import { resizeRendererToDisplaySize, main } from '../../utils/utils.js'
+
+
+        const plainGenerate = ({ scene, loader, renderer, camera }) => {
+            // 地板
+            const planeSize = 40;
+            const texture = loader.load('../../image/checker.png');
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.magFilter = THREE.NearestFilter;
+            const repeats = planeSize / 2;
+            texture.repeat.set(repeats, repeats);
+            const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
+            const planeMat = new THREE.MeshBasicMaterial({
+                map: texture,
+                side: THREE.DoubleSide,
+            });
+            planeMat.color.setRGB(1.5, 1.5, 1.5)
+            const mesh = new THREE.Mesh(planeGeo, planeMat);
+            mesh.rotation.x = Math.PI * -.5;
+            scene.add(mesh);
+        }
+
+        main(({ canvas, scene, renderer, camera, loader }) => {
+            // scene.background = new THREE.Color('white');  //背景色
+
+            camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100)
+            camera.position.set(0, 10, 20);
+            camera.lookAt(0, 0, 0);
+
+            plainGenerate({ scene, loader, renderer, camera }) // 地板
+
+            // {  // 灯光
+            //     const skyColor = 0xb1e1ff; // light blue
+            //     const groundColor = 0xb97a20; // brownish orange
+            //     const intensity = 2;
+            //     const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+            //     scene.add(light);
+            // }
+
+
+            const render = (time) => {
+                resizeRendererToDisplaySize(renderer);
+                {
+                    const canvas = renderer.domElement;
+                    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                    camera.updateProjectionMatrix();
+                }
+                renderer.render(scene, camera);
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+        }, 'app');
+
+    </script>
+</body>
+
+</html>
+
+<style>
+    #app {
+        width: 500px;
+        height: 250px;
+    }
+</style>

@@ -13,7 +13,7 @@
 
 
     <script type="module">
-        import * as THREE from '../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+        import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
         console.log(THREE);
         const main = () => {
             const canvas = document.querySelector('#c');
@@ -39,12 +39,12 @@
 
 
             const materials = [  //多个纹理贴图
-                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-1.jpg') }),
-                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-2.jpg') }),
-                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-3.jpg') }),
-                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-4.jpg') }),
-                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-5.jpg') }),
-                new THREE.MeshBasicMaterial({ map: loadColorTexture('./image/flower-6.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('../../image/flower-1.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('../../image/flower-2.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('../../image/flower-3.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('../../image/flower-4.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('../../image/flower-5.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loadColorTexture('../../image/flower-6.jpg') }),
             ]
             const mesh = new THREE.Mesh(geometry, materials);
 
