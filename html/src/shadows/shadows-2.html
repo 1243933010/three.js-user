@@ -21,6 +21,8 @@
 
         main(({ canvas, scene, renderer, camera, loader }) => {
             // scene.background = new THREE.Color('white');  //背景色
+            renderer.shadowMap.enabled = true;  //渲染器阴影渲染开关
+            
             camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100)
             camera.position.set(0, 10, 20);
             camera.lookAt(0, 0, 0);

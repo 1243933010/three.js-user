@@ -19,6 +19,7 @@ export const plainGenerate = ({ scene, loader, renderer, camera }) => {
     });
     planeMat.color.setRGB(1.5, 1.5, 1.5)
     const mesh = new THREE.Mesh(planeGeo, planeMat);
+    mesh.receiveShadow = true;
     mesh.rotation.x = Math.PI * -.5;
     scene.add(mesh);
 }
@@ -27,8 +28,10 @@ export const lightGenerate = ({ scene, loader, renderer, camera }) => {
     // 灯光
     const skyColor = 0xb1e1ff; // light blue
     const groundColor = 0xb97a20; // brownish orange
-    const intensity = 2;
+    const intensity = 5;
     const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+    // const light = new THREE.DirectionalLight(0xb1e1ff, 1);
+    light.castShadow = true;
     scene.add(light);
 
 }
@@ -47,6 +50,8 @@ export const sphereGenerate = ({ scene, loader, renderer, camera }) => {
         wireframe: true,
     });
     const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     mesh.position.set(-sphereRadius - 5, sphereRadius, 0);
     scene.add(mesh);
 }
@@ -61,6 +66,8 @@ export const boxGenerate = ({ scene, loader, renderer, camera }) => {
         flatShading: true,
     });
     const mesh = new THREE.Mesh(boxGeo, boxMat);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     mesh.position.set(boxWidth + 5, boxHeight / 2, 0);
     scene.add(mesh);
 }
@@ -74,5 +81,5 @@ export const renderFnc = ({ scene, loader, renderer, camera }) => {
         camera.updateProjectionMatrix();
     }
     renderer.render(scene, camera);
-    
+
 }
