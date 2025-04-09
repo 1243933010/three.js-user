@@ -16,7 +16,7 @@
         import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
        import { OrbitControls } from '../../../OrbitControls.js';
         import { resizeRendererToDisplaySize, main } from '../../utils/utils.js'
-        import { plainGenerate, lightGenerate,sphereGenerate,boxGenerate } from './js/index.js'
+        import { plainGenerate, lightGenerate,sphereGenerate,boxGenerate,renderFnc } from './js/index.js'
 
 
         main(({ canvas, scene, renderer, camera, loader }) => {
@@ -29,19 +29,12 @@
             lightGenerate({ scene, loader, renderer, camera }) // 灯光
             sphereGenerate({ scene, loader, renderer, camera }) 
             boxGenerate({ scene, loader, renderer, camera })
-
-
+            
             const controls = new OrbitControls(camera, canvas);
             controls.update();
 
             const render = (time) => {
-                resizeRendererToDisplaySize(renderer);
-                {
-                    const canvas = renderer.domElement;
-                    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-                    camera.updateProjectionMatrix();
-                }
-                renderer.render(scene, camera);
+                renderFnc({ scene, renderer, camera, time })
                 requestAnimationFrame(render);
             }
             requestAnimationFrame(render);

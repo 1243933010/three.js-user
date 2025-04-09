@@ -1,6 +1,8 @@
 
 import * as THREE from '../../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
 // import { OrbitControls } from '../../../../OrbitControls.js';
+import { resizeRendererToDisplaySize } from '../../../utils/utils.js'
+
 export const plainGenerate = ({ scene, loader, renderer, camera }) => {
     // 地板
     const planeSize = 40;
@@ -45,7 +47,7 @@ export const sphereGenerate = ({ scene, loader, renderer, camera }) => {
         wireframe: true,
     });
     const mesh = new THREE.Mesh(sphereGeo, sphereMat);
-    mesh.position.set(-sphereRadius-5, sphereRadius , 0);
+    mesh.position.set(-sphereRadius - 5, sphereRadius, 0);
     scene.add(mesh);
 }
 
@@ -55,10 +57,22 @@ export const boxGenerate = ({ scene, loader, renderer, camera }) => {
     const boxDepth = 4;
     const boxGeo = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     const boxMat = new THREE.MeshPhongMaterial({
-        color:0xffffff,
+        color: 0xffffff,
         flatShading: true,
     });
     const mesh = new THREE.Mesh(boxGeo, boxMat);
     mesh.position.set(boxWidth + 5, boxHeight / 2, 0);
     scene.add(mesh);
+}
+
+
+export const renderFnc = ({ scene, loader, renderer, camera }) => {
+    resizeRendererToDisplaySize(renderer);
+    {
+        const canvas = renderer.domElement;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        camera.updateProjectionMatrix();
+    }
+    renderer.render(scene, camera);
+    
 }

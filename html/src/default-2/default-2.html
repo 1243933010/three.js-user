@@ -9,24 +9,32 @@
 
 <body>
 
-    <canvas id="c"></canvas>
+    <canvas id="app"></canvas>
 
 
     <script type="module">
         import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
         import { resizeRendererToDisplaySize, main } from '../../utils/utils.js'
+        import { OrbitControls } from '../../../OrbitControls.js';
+        // import { renderFnc } from './js/index.js'
 
 
+        main(({ canvas, scene, renderer, camera, loader }) => {
+            camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100)
+            camera.position.set(0, 10, 20);
+            camera.lookAt(0, 0, 0);
 
-        main(({ canvas, scene, renderer, camera, render }) => {
-            camera = new THREE.PerspectiveCamera(75, 2, 0.1, 100)
+
             
-            renderer.render(scene, camera);
-            render()
-            
-        },(render)=>{
+            // const controls = new OrbitControls(camera, canvas);
+            // controls.update();
+
+            const render = (time) => {
+                // renderFnc({ scene, renderer, camera, time })
+                requestAnimationFrame(render);
+            }
             requestAnimationFrame(render);
-        });
+        }, 'app');
 
 
     </script>
