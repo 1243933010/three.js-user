@@ -23,12 +23,12 @@
             // scene.background = new THREE.Color('white');  //背景色
             renderer.shadowMap.enabled = true;  //渲染器阴影渲染开关
             camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100)
-            
+
             initCamera({ camera }) // 相机
             plainGenerate({ scene, loader, renderer, camera }) // 地板
             lightGenerate({ scene, loader, renderer, camera }) // 灯光
             sphereGenerate({ scene, loader, renderer, camera }) 
-            boxGenerate({ scene, loader, renderer, camera })
+            // boxGenerate({ scene, loader, renderer, camera })
             
             const controls = new OrbitControls(camera, canvas);  // 轨道控制器
             controls.update();

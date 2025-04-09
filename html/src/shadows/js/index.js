@@ -47,7 +47,7 @@ export const lightGenerate = ({ scene, loader, renderer, camera }) => {
     // const groundColor = 0xb97a20; // brownish orange
     // const intensity = 5;
     // const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);  //环境光，没有特定方向不显示阴影
-    const light = new THREE.DirectionalLight(0xb3adad, 5);  //平行光，有特定方向显示阴影
+    const light = new THREE.DirectionalLight('green', 5);  //平行光，有特定方向显示阴影
     light.castShadow = true;
     light.position.set(5, 10, 2);
 
@@ -90,7 +90,7 @@ export const sphereGenerate = ({ scene, loader, renderer, camera }) => {
     const mesh = new THREE.Mesh(sphereGeo, sphereMat);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
-    mesh.position.set(-sphereRadius - 5, sphereRadius, 0);
+    mesh.position.set(sphereRadius, sphereRadius+2, 0);
     scene.add(mesh);
 }
 
