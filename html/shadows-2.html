@@ -16,8 +16,8 @@
         import * as THREE from '../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
         import { resizeRendererToDisplaySize, main } from './utils/utils.js'
 
-        main(({ canvas, scene, renderer, render }) => {
-            const camera = new THREE.PerspectiveCamera(75, 2, 0.1, 100);
+        main(({ canvas, scene, renderer, render ,camera}) => {
+            camera= new THREE.PerspectiveCamera(75, 2, 0.1, 100)
             function render(time) {
                 renderer.render(scene, camera);
                 requestAnimationFrame(render);

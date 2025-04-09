@@ -18,6 +18,7 @@ export const resizeRendererToDisplaySize = (renderer)=> {  // resize the rendere
 export const main = (callback,id='c')=>{
     const canvas = document.querySelector(`#${id}`);
     const scene = new THREE.Scene();
+    const camera = null;
     const renderer = new THREE.WebGLRenderer({   //渲染器
         canvas, antialias: true
     });
@@ -25,5 +26,5 @@ export const main = (callback,id='c')=>{
     function render(time,call) {
         call(time)
     }
-    callback({canvas,scene,renderer,render})
+    callback({canvas,scene,renderer,camera,render})
 }
