@@ -28,8 +28,12 @@
             const view2Elem = document.querySelector('#view2');
             const scene = new THREE.Scene();
             const renderer = new THREE.WebGLRenderer({   //渲染器
-                canvas, antialias: true
+                canvas,
+                antialias: true,
+                alpha: true
             });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
 
 
             const fov = 45;
@@ -196,7 +200,8 @@
                     // 来原视野中不要绘制cameraHelper
                     cameraHelper.visible = false;
 
-                    // scene.background.set(0x000000);
+                    // 设置第一个视图的背景色
+                    scene.background = new THREE.Color(0x000000);
 
                     // 渲染
                     renderer.render(scene, camera);
@@ -213,7 +218,8 @@
                     // 在第二台摄像机中绘制cameraHelper
                     cameraHelper.visible = true;
 
-                    // scene.background.set(0x000040);
+                    // 设置第二个视图的背景色
+                    scene.background = new THREE.Color(0x000040);
 
                     renderer.render(scene, camera2);
                 }
@@ -280,8 +286,12 @@
 
 <style>
     #c {
-        width: 500px;
-        height: 300px;
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 
     .split {
@@ -294,7 +304,7 @@
     }
 
     .split>div {
-        width: 100%;
+        width: 50%;
         height: 100%;
     }
 </style>
