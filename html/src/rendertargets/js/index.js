@@ -1,4 +1,3 @@
-
 import * as THREE from '../../../../three.module.js';   //module
 import { resizeRendererToDisplaySize } from '../../../utils/utils.js'
 
@@ -79,6 +78,12 @@ export const initRtCamera = ({ scene, loader, renderer, camera }) => {
 
         const rtScene = new THREE.Scene();
         rtScene.background = new THREE.Color('red');
+        
+        // 添加光照到 rtScene
+        const rtLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+        rtLight.position.set(-1, 0, 1);
+        rtScene.add(rtLight);
+        lightHelper({ scene:rtScene, light:rtLight })
         resolve({ rtCamera, rtScene, renderTarget })
     })
 }
