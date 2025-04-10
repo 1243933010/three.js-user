@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雾</title>
+</head>
+
+<body>
+
+    <canvas id="app"></canvas>
+
+
+    <script type="module">
+        import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
+        import { resizeRendererToDisplaySize, mainAsync } from '../../utils/utils.js'
+        import { OrbitControls } from '../../../OrbitControls.js';
+        import { renderFnc, initFog, initFogExp2, boxGenerate, initCamera, initRenderer, lightGenerate } from './js/index.js'
+
+
+        let { canvas, scene, renderer, camera, loader } = await mainAsync('app', false);
+        camera = await initCamera({ camera, loader,scene })
+        renderer = await initRenderer({ renderer, camera, canvas })
+
+        let cubes =  boxGenerate({ scene, loader })
+        initFog({ scene, loader })
+        lightGenerate({ scene, loader })
+        const controls = new OrbitControls(camera, canvas);
+        controls.update();
+
+        const render = (time) => {
+            time *= 0.001;
+            renderFnc({ scene, renderer, camera, time ,cubes,time})
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+    </script>
+</body>
+
+</html>
+
+<style>
+    #app {
+        width: 500px;
+        height: 250px;
+    }
+</style>

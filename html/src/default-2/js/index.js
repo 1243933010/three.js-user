@@ -65,7 +65,14 @@ import { resizeRendererToDisplaySize } from '../../../utils/utils.js'
 //     scene.add(mesh);
 // }
 
-
+export const initCamera = ({ scene, loader, renderer, camera }) => {
+    return new Promise((resolve, reject) => {
+        camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100)
+        camera.position.set(0, 10, 20);
+        camera.lookAt(0, 0, 0);
+        resolve(camera)
+    })
+}
 export const renderFnc = ({ scene, loader, renderer, camera }) => {
     resizeRendererToDisplaySize(renderer);
     {
@@ -74,5 +81,5 @@ export const renderFnc = ({ scene, loader, renderer, camera }) => {
         camera.updateProjectionMatrix();
     }
     renderer.render(scene, camera);
-    
+
 }

@@ -28,8 +28,8 @@ export const plainGenerate = ({ scene, loader, renderer, camera }) => {
     texture.wrapT = THREE.RepeatWrapping;
     texture.magFilter = THREE.NearestFilter;
     const repeats = planeSize / 2;
-    texture.repeat.set(repeats, repeats);
-    const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
+    texture.repeat.set(repeats, repeats);  // 设置纹理的平铺次数
+    const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);  // 平面几何体
     const planeMat = new THREE.MeshPhongMaterial({
         map: texture,
         side: THREE.DoubleSide,
@@ -47,29 +47,12 @@ export const lightGenerate = ({ scene, loader, renderer, camera }) => {
     // const groundColor = 0xb97a20; // brownish orange
     // const intensity = 5;
     // const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);  //环境光，没有特定方向不显示阴影
-    const light = new THREE.DirectionalLight('green', 5);  //平行光，有特定方向显示阴影
+    // const light = new THREE.DirectionalLight('green', 5);  //平行光，有特定方向显示阴影
+    const light = new THREE.PointLight('red', 100);
     light.castShadow = true;
     light.position.set(5, 10, 2);
-
-    // light.shadow.mapSize.width = 1024;
-    // light.shadow.mapSize.height = 1024;
-    // light.shadow.camera.near = 0.5;
-    // light.shadow.camera.far = 50;
     scene.add(light);
-
-    const helper = new THREE.DirectionalLightHelper(light);  // 点光源辅助,显示光源位置
-    scene.add(helper);
-    
-
-    const gui = new GUI();  //快捷操作控制台设置
-    gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
-    gui.add(light, 'intensity', 0, 5, 0.01);
-    gui.add(light.target.position, 'x', -10, 10);
-    gui.add(light.target.position, 'z', -10, 10);
-    gui.add(light.target.position, 'y', 0, 10);
-    makeXYZGUI(gui, light.position, 'position', updateLight(helper));
-    makeXYZGUI(gui, light.target.position, 'target', updateLight(helper));
-
+    lightHelper(scene,light);  // 灯光辅助函数
 }
 
 export const sphereGenerate = ({ scene, loader, renderer, camera }) => {
@@ -88,9 +71,9 @@ export const sphereGenerate = ({ scene, loader, renderer, camera }) => {
         side: THREE.DoubleSide,
     });
     const mesh = new THREE.Mesh(sphereGeo, sphereMat);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.position.set(sphereRadius, sphereRadius+2, 0);
+    mesh.castShadow = true;   // 设置物体是否可以产生阴影
+    mesh.receiveShadow = true;  // 设置物体是否可以接收阴影
+    mesh.position.set(sphereRadius, sphereRadius + 2, 0);
     scene.add(mesh);
 }
 
@@ -105,8 +88,8 @@ export const boxGenerate = ({ scene, loader, renderer, camera }) => {
         side: THREE.DoubleSide,
     });
     const mesh = new THREE.Mesh(boxGeo, boxMat);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
+    mesh.castShadow = true;   // 设置物体是否可以产生阴影
+    mesh.receiveShadow = true;  // 设置物体是否可以接收阴影
     mesh.position.set(boxWidth + 5, boxHeight / 2, 0);
     scene.add(mesh);
 }
@@ -123,6 +106,21 @@ export const renderFnc = ({ scene, loader, renderer, camera }) => {
 
 }
 
+
+const lightHelper = (scene,light) => {  // 灯光辅助函数
+    // const helper = new THREE.DirectionalLightHelper(light);  // 点光源辅助,显示光源位置
+    const helper = new THREE.PointLightHelper(light);
+    scene.add(helper);
+
+    // const gui = new GUI();  //快捷操作控制台设置
+    // gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
+    // gui.add(light, 'intensity', 0, 5, 0.01);
+    // gui.add(light.target.position, 'x', -10, 10);
+    // gui.add(light.target.position, 'z', -10, 10);
+    // gui.add(light.target.position, 'y', 0, 10);
+    // makeXYZGUI(gui, light.position, 'position', updateLight(helper));
+    // makeXYZGUI(gui, light.target.position, 'target', updateLight(helper));
+}
 
 function makeXYZGUI(gui, vector3, name, onChangeFn) {
     const folder = gui.addFolder(name);

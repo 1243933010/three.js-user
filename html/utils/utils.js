@@ -15,19 +15,36 @@ export const resizeRendererToDisplaySize = (renderer) => {  // resize the render
     return needResize;
 }
 
+/**
+ * @param {string} id  // canvas id
+ * @param {boolean} renderBool   // 是否执行默认渲染renderer
+ * @returns {object} // 返回一个对象
+ */
 
-export const main = (callback, id = 'app') => {
+export const main = (callback, id = 'app', renderBool = true) => {
     const canvas = document.querySelector(`#${id}`);
     const scene = new THREE.Scene();
     const camera = null;
     const loader = new THREE.TextureLoader();
-    const renderer = new THREE.WebGLRenderer({   //渲染器
+    const renderer = renderBool ? new THREE.WebGLRenderer({   //渲染器
         canvas, antialias: true
-    });
+    }) : null;
 
     callback({ canvas, scene, renderer, loader, camera })
 }
 
+export const mainAsync = async (id = 'app', renderBool = true) => {  //初始化mian同步函数
+    return new Promise((resolve, reject) => {
+        const canvas = document.querySelector(`#${id}`);
+        const scene = new THREE.Scene();
+        const camera = null;
+        const loader = new THREE.TextureLoader();
+        const renderer = renderBool ? new THREE.WebGLRenderer({   //渲染器
+            canvas, antialias: true
+        }) : null;
+        resolve({ canvas, scene, renderer, loader, camera })
+    })
+}
 
 export class MinMaxGUIHelper {  // 最小最大辅助类
     constructor(obj, minProp, maxProp, minDif) {

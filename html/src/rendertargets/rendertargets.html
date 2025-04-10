@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>阴影-2</title>
+    <title>渲染目标</title>
 </head>
 
 <body>
@@ -16,16 +16,23 @@
         import * as THREE from '../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
         import { resizeRendererToDisplaySize, mainAsync } from '../../utils/utils.js'
         import { OrbitControls } from '../../../OrbitControls.js';
-        import { renderFnc, initCamera } from './js/index.js'
+        import { renderFnc, initRtCamera, initCamera, lightGenerate, rtBoxGenerate, boxGenerate } from './js/index.js'
 
 
         let { canvas, scene, renderer, loader, camera } = await mainAsync('app');
-        camera = await initCamera({ camera, canvas })
-        // const controls = new OrbitControls(camera, canvas);
-        // controls.update();
+        camera = await initCamera({ scene, canvas })
+        // scene.background = 'red'
+        let { rtCamera, rtScene, renderTarget } = await initRtCamera({ scene, camera, canvas })
+
+        lightGenerate({ scene })
+        let { rtCubes } = rtBoxGenerate({ rtScene })
+        let {cube} =  boxGenerate({ scene, renderTarget })
+        const controls = new OrbitControls(camera, canvas);
+        controls.update();
 
         const render = (time) => {
-            renderFnc({ scene, renderer, camera, time })
+            time *= 0.001;
+            renderFnc({ scene, renderer, camera, time, rtCubes, renderTarget, rtScene, rtCamera,cube })
             requestAnimationFrame(render);
         }
         requestAnimationFrame(render);
