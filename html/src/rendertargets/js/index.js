@@ -1,17 +1,16 @@
 
-import * as THREE from '../../../../three.module.js';   //module文件内部引入的有core.js,需要一起拿出来
-// import { OrbitControls } from '../../../../OrbitControls.js';
+import * as THREE from '../../../../three.module.js';   //module
 import { resizeRendererToDisplaySize } from '../../../utils/utils.js'
 
 
 export const lightGenerate = ({ scene, loader, renderer, camera }) => {  // light
     // 灯光
     const color = 0xFFFFFF;
-    const intensity = 1;
+    const intensity = 50;
     const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-1, 0, 4);
+    light.position.set(-1, 0, 1);
     scene.add(light);
-    // lightHelper({scene,light})
+    lightHelper({ scene, light })
 
 }
 
@@ -100,6 +99,15 @@ export const initCamera = ({ scene, loader, renderer, camera }) => {
 }
 export const renderFnc = ({ scene, time, renderer, camera, rtCubes, renderTarget, rtScene, rtCamera, cube }) => {
     resizeRendererToDisplaySize(renderer);
+    // if (resizeRendererToDisplaySize(renderer)) {
+    //     const canvas = renderer.domElement;
+    //     camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    //     camera.updateProjectionMatrix();
+
+    //     renderTarget.setSize(canvas.width, canvas.height);
+    //     rtCamera.aspect = camera.aspect;
+    //     rtCamera.updateProjectionMatrix();
+    // }
     // rotate all the cubes in the render target scene
     rtCubes.forEach((cube, ndx) => {
         const speed = 1 + ndx * .1;
